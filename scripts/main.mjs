@@ -169,9 +169,7 @@ Hooks.on('renderChatMessageHTML',(message,html)=>{
             card.classList.remove('rsa-fate-success','rsa-fate-failure');card.classList.add(state);
         }
         const footer=document.createElement('section');footer.className='rsa-fate-footer';
-        footer.innerHTML=`<strong>${esc(t('FATE_ROLL'))} · ${esc(t(fate.success?'SUCCESS':'FAILURE'))}</strong><p>${storedFate ? esc(game.i18n.format('RSA.HISTORY',fate)) : ''}</p><blockquote>${esc(t((fate.success?'SUCCESS_':'FAILURE_')+fate.phraseIndex))}</blockquote>`;
-        const source=game.messages.get(fate.sourceId);
-        if (source?.isContentVisible) footer.append(historyLink(source.id,t('ORIGINAL')));
+        footer.innerHTML=`<strong>${esc(t('FATE_ROLL'))}</strong><p>${storedFate ? esc(game.i18n.format('RSA.HISTORY',fate)) : ''}</p><blockquote>${esc(t((fate.success?'SUCCESS_':'FAILURE_')+fate.phraseIndex))}</blockquote>`;
         (body.querySelector('.dh-card') ?? body).append(footer);
     }
     const replacement=game.messages.get(message.getFlag(SCOPE,'replacement'));

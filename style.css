@@ -46,10 +46,11 @@ body .dark-heresy.chat.roll.rsa-compact-card .dh-kv {gap:8px 12px;}
 body .dark-heresy.chat.roll.rsa-compact-card .dh-kv dt {font:11px/1.45 sans-serif;letter-spacing:0;text-transform:none;color:#b7bcc6;}
 body .dark-heresy.chat.roll.rsa-compact-card .dh-kv dd {font:12px/1.45 sans-serif;color:#f1eadc;}
 body .dark-heresy.chat.roll.rsa-compact-card button.rsa-rule-link {font:12px/1.4 sans-serif;text-transform:none;letter-spacing:0;}
-body .chat-message.rsa-fate-success,body .chat-message.rsa-fate-failure {border:1px solid #60563c!important;box-shadow:none!important;}
-body .dark-heresy.chat .dh-card.rsa-fate-success {border-top:3px solid #c9a75d!important;outline:none;box-shadow:none!important;}
-body .dark-heresy.chat .dh-card.rsa-fate-failure {border-top:3px solid #b65c65!important;outline:none;box-shadow:none!important;}
-body .rsa-fate-footer {margin:0;padding:12px;border-top:1px solid #635737;background:#ffffff04;}
+body .chat-message.rsa-fate-success {border:2px solid #e8bd51!important;box-shadow:0 0 5px #e8bd5144!important;}
+body .chat-message.rsa-fate-failure {border:2px solid #dc153e!important;box-shadow:0 0 5px #dc153e44!important;}
+body .dark-heresy.chat.roll.rsa-compact-card .dh-card.rsa-fate-success {border:3px solid #e8bd51!important;outline:none;box-shadow:inset 0 0 12px #e8bd5144!important;}
+body .dark-heresy.chat.roll.rsa-compact-card .dh-card.rsa-fate-failure {border:3px solid #dc153e!important;outline:none;box-shadow:inset 0 0 12px #dc153e44!important;}
+body .rsa-fate-footer {margin:0;padding:12px;border-top:1px solid #635737;background:#ffffff04;text-align:center;}
 body .rsa-fate-footer>strong {font:600 12px/1.5 sans-serif;color:#d5b976!important;}
 body .rsa-fate-footer p {margin:5px 0;font:11px/1.5 sans-serif;color:#bbc1ca;}
 body .rsa-fate-footer p:empty {display:none;}

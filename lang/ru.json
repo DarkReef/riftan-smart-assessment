@@ -6,7 +6,7 @@
   "RSA.FAILURE": "Провал",
   "RSA.REPLACED": "Заменён перебросом",
   "RSA.ORIGINAL": "Исходный бросок",
-  "RSA.HISTORY": "Было: {before} → стало: {after} · Судьба: {fateBefore} → {fateAfter}",
+  "RSA.HISTORY": "Было: {before} → стало: {after}",
   "RSA.WAITING": "Запрос переброса за Судьбу",
   "RSA.GM_REQUIRED": "Для переброса нужен активный мастер.",
   "RSA.NO_PERMISSION": "Нет права перебрасывать эту проверку.",
