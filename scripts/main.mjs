@@ -71,6 +71,10 @@ export function enhanceEffectEditor(app,html) {
             box.append(search,list,hint);input.parentElement.append(box);
             function catalog(){return fieldCatalog(target(),CONFIG.ActiveEffect.attributeKeys??{},key=>game.i18n.localize(key));}
             function validate(){
+                if (!input.value.trim()) {
+                    delete input.dataset.rsaState; delete hint.dataset.rsaState;
+                    hint.textContent=t('SEARCH'); return;
+                }
                 const entry=catalog().find(e=>e.key===input.value);
                 const field=suffix=>[...root.querySelectorAll('[name]')].find(el=>el.name===prefix+suffix);
                 const value=field('value')?.value??'',type=field('type')?.value??field('mode')?.value??'override',phase=field('phase')?.value??'initial';
@@ -168,7 +172,7 @@ Hooks.on('renderChatMessageHTML',(message,html)=>{
         footer.innerHTML=`<strong>${esc(t('FATE_ROLL'))} · ${esc(t(fate.success?'SUCCESS':'FAILURE'))}</strong><p>${storedFate ? esc(game.i18n.format('RSA.HISTORY',fate)) : ''}</p><blockquote>${esc(t((fate.success?'SUCCESS_':'FAILURE_')+fate.phraseIndex))}</blockquote>`;
         const source=game.messages.get(fate.sourceId);
         if (source?.isContentVisible) footer.append(historyLink(source.id,t('ORIGINAL')));
-        body.append(footer);
+        (body.querySelector('.dh-card') ?? body).append(footer);
     }
     const replacement=game.messages.get(message.getFlag(SCOPE,'replacement'));
     if (replacement?.isContentVisible) {

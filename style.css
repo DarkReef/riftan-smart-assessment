@@ -34,3 +34,26 @@ body .dark-heresy.chat .dh-card.rsa-fate-success,
 body .dark-heresy.chat .roll-card-background.rsa-fate-success {border:3px solid #e8bd51!important;outline:1px solid #e8bd51;box-shadow:inset 0 0 12px #e8bd5166!important;}
 body .dark-heresy.chat .dh-card.rsa-fate-failure,
 body .dark-heresy.chat .roll-card-background.rsa-fate-failure {border:3px solid #dc153e!important;outline:1px solid #dc153e;box-shadow:inset 0 0 12px #dc153e66!important;}
+/* Compact, readable cards in narrow chat columns. */
+body .dark-heresy.chat.roll.rsa-compact-card .dh-card {
+  border:1px solid #786843!important;border-radius:8px;overflow:hidden;clip-path:none;
+  background:linear-gradient(145deg,#20252b,#14171c);box-shadow:none!important;
+}
+body .dark-heresy.chat.roll.rsa-compact-card .dh-card-h {padding:12px;gap:8px;align-items:flex-start;}
+body .dark-heresy.chat.roll.rsa-compact-card .dh-card-h .who {font:600 13px/1.4 sans-serif;letter-spacing:.02em;text-transform:none;flex:1;}
+body .dark-heresy.chat.roll.rsa-compact-card .verdict {font:600 11px/1.5 sans-serif;}
+body .dark-heresy.chat.roll.rsa-compact-card .dh-kv {gap:8px 12px;}
+body .dark-heresy.chat.roll.rsa-compact-card .dh-kv dt {font:11px/1.45 sans-serif;letter-spacing:0;text-transform:none;color:#b7bcc6;}
+body .dark-heresy.chat.roll.rsa-compact-card .dh-kv dd {font:12px/1.45 sans-serif;color:#f1eadc;}
+body .dark-heresy.chat.roll.rsa-compact-card button.rsa-rule-link {font:12px/1.4 sans-serif;text-transform:none;letter-spacing:0;}
+body .chat-message.rsa-fate-success,body .chat-message.rsa-fate-failure {border:1px solid #60563c!important;box-shadow:none!important;}
+body .dark-heresy.chat .dh-card.rsa-fate-success {border-top:3px solid #c9a75d!important;outline:none;box-shadow:none!important;}
+body .dark-heresy.chat .dh-card.rsa-fate-failure {border-top:3px solid #b65c65!important;outline:none;box-shadow:none!important;}
+body .rsa-fate-footer {margin:0;padding:12px;border-top:1px solid #635737;background:#ffffff04;}
+body .rsa-fate-footer>strong {font:600 12px/1.5 sans-serif;color:#d5b976!important;}
+body .rsa-fate-footer p {margin:5px 0;font:11px/1.5 sans-serif;color:#bbc1ca;}
+body .rsa-fate-footer p:empty {display:none;}
+body .rsa-fate-footer blockquote {margin:8px 0 0;padding:0;border:0;font:italic 13px/1.5 Georgia,serif;color:#dfd6c3;}
+.rsa-field-helper {min-width:0;width:100%;}
+.rsa-field-results:not(:empty) {position:relative;z-index:2;max-height:240px;background:#20232b;border:1px solid #756647;border-radius:4px;}
+.rsa-field-choice {overflow-wrap:anywhere;}
