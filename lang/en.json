@@ -6,7 +6,7 @@
   "RSA.FAILURE": "Failure",
   "RSA.REPLACED": "Replaced by reroll",
   "RSA.ORIGINAL": "Original roll",
-  "RSA.HISTORY": "Before: {before} → after: {after} · Fate: {fateBefore} → {fateAfter}",
+  "RSA.HISTORY": "Before: {before} → after: {after}",
   "RSA.WAITING": "Fate reroll request",
   "RSA.GM_REQUIRED": "An active GM is required for Fate rerolls.",
   "RSA.NO_PERMISSION": "You cannot reroll this test.",

@@ -8,6 +8,14 @@ export function fieldCatalog(target, registry = {}, localize = key=>key) {
         if (value === undefined || value === null || typeof value === 'object' || !key.startsWith('system.')) continue;
         entries.set(key,{key,type:typeof value === 'number'?'Number':typeof value === 'boolean'?'Boolean':'String',label:localize(info.label || key),phase:FINAL_KEYS.has(key)?'final':'initial'});
     }
+    // Enumerate editable fields on the actual Actor even when the registry is incomplete.
+    for (const group of ['characteristics','skills']) for (const [name,data] of Object.entries(target.system?.[group] ?? {})) {
+        for (const part of ['base','advance','tempModifier','unnatural','cost','starter']) {
+            const value=data?.[part]; if (!['number','boolean'].includes(typeof value)) continue;
+            const key=`system.${group}.${name}.${part}`;
+            if (!entries.has(key)) entries.set(key,{key,type:typeof value==='boolean'?'Boolean':'Number',label:key,phase:'initial'});
+        }
+    }
     // User-defined skill specialities are absent from the system's static catalog.
     for (const [skill,data] of Object.entries(target.system?.skills ?? {})) {
         for (const [speciality,values] of Object.entries(data.specialities ?? {})) {
@@ -23,7 +31,7 @@ export function fieldCatalog(target, registry = {}, localize = key=>key) {
         const named=localize('RSA.FIELD_'+entry.key.slice(7));
         if (named!=='RSA.FIELD_'+entry.key.slice(7)) entry.label=named;
         const skill=entry.key.match(/^system\.skills\.([^.]+)\.([^.]+)$/);
-        if (skill) entry.label=`${localize(target.system.skills[skill[1]].label || 'SKILL.'+skill[1].toUpperCase())} / ${localize('RSA.PART_'+skill[2])}`;
+        if (skill) entry.label=`${localize(target.system.skills[skill[1]].label || 'SKILL.'+skill[1].replace(/([a-z])([A-Z])/g,'$1_$2').toUpperCase())} / ${localize('RSA.PART_'+skill[2])}`;
         if (match) entry.label=`${localize('RSA.CHAR_'+match[1])} / ${localize('RSA.PART_'+match[2])}`;
     }
     return [...entries.values()].sort((a,b)=>a.label.localeCompare(b.label));

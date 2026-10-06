@@ -49,10 +49,12 @@ Run `npm test` in this repository. The system is installed separately.
 The manual release workflow creates a draft release with this module only.
 Live multiplayer validation against the new system build is still pending.
 
-## Private repository distribution
+## Установка из публичного репозитория
 
-This repository is private. Release URLs require GitHub access and are not public
-Foundry installation endpoints. Releases have not been published yet. After a
-release is approved, download its module ZIP while signed in to GitHub and extract
-it into `Data/modules/riftan-smart-assessment`, with `module.json` directly in that folder.
-Do not embed access tokens in manifests or installation URLs.
+В Foundry → Add-on Modules → Install Module вставьте URL манифеста:
+
+```text
+https://github.com/DarkReef/riftan-smart-assessment/releases/latest/download/module.json
+```
+
+Манифест и ZIP доступны без авторизации. Для обновления используйте штатную проверку обновлений Foundry. Рекомендуемая система — Apex Heresy RU 1.5.3; система устанавливается отдельно.
