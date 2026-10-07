@@ -32,7 +32,12 @@ export function fieldCatalog(target, registry = {}, localize = key=>key) {
         if (named!=='RSA.FIELD_'+entry.key.slice(7)) entry.label=named;
         const skill=entry.key.match(/^system\.skills\.([^.]+)\.([^.]+)$/);
         if (skill) entry.label=`${localize(target.system.skills[skill[1]].label || 'SKILL.'+skill[1].replace(/([a-z])([A-Z])/g,'$1_$2').toUpperCase())} / ${localize('RSA.PART_'+skill[2])}`;
-        if (match) entry.label=`${localize('RSA.CHAR_'+match[1])} / ${localize('RSA.PART_'+match[2])}`;
+        if (match) {
+            const term=globalThis.game?.darkHeresy?.localization?.characteristicTerm?.(target,match[1]);
+            const sourceLabel=target.system.characteristics?.[match[1]]?.label;
+            entry.label=`${term?.label??(sourceLabel?localize(sourceLabel):localize('RSA.CHAR_'+match[1]))} / ${localize('RSA.PART_'+match[2])}`;
+            entry.aliases=term?.aliases??[match[1].replace(/([a-z])([A-Z])/g,'$1 $2'),...(match[1]==='ballisticSkill'?['Стрельба','Дальний бой','Ballistic Skill','BS']:[])];
+        }
     }
     return [...entries.values()].sort((a,b)=>a.label.localeCompare(b.label));
 }
@@ -49,5 +54,5 @@ export function assessChange(entry,value,type,phase) {
 }
 export function searchFields(catalog,query) {
     const terms=String(query).toLocaleLowerCase().trim().split(/\s+/).filter(Boolean);
-    return catalog.filter(entry=>terms.every(term=>`${entry.label} ${entry.key}`.toLocaleLowerCase().includes(term)));
+    return catalog.filter(entry=>terms.every(term=>`${entry.label} ${entry.key} ${(entry.aliases??[]).join(" ")}`.toLocaleLowerCase().includes(term)));
 }

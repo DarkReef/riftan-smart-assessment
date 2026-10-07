@@ -65,36 +65,54 @@ export function enhanceEffectEditor(app,html) {
             input.dataset.rsaAttached='true';
             const prefix=input.name.slice(0,-3),row=input.closest('.effect-change,.change,li,tr')??input.parentElement.parentElement;
             const box=document.createElement('div');box.className='rsa-field-helper';
-            const search=document.createElement('input');search.type='search';search.placeholder=t('SEARCH');search.setAttribute('aria-label',t('SEARCH'));
-            const list=document.createElement('div');list.className='rsa-field-results';
+            input.setAttribute('role','combobox');input.setAttribute('aria-autocomplete','list');input.setAttribute('autocomplete','off');input.placeholder=t('SEARCH');
+            let committed=input.value,active=-1,choices=[];
+            const listId='rsa-fields-'+foundry.utils.randomID();input.setAttribute('aria-controls',listId);input.setAttribute('aria-expanded','false');
+            const list=document.createElement('div');list.className='rsa-field-results';list.id=listId;list.setAttribute('role','listbox');
             const hint=document.createElement('small');hint.className='rsa-field-hint';hint.setAttribute('aria-live','polite');
-            box.append(search,list,hint);input.parentElement.append(box);
+            box.append(list,hint);input.parentElement.append(box);
             function catalog(){return fieldCatalog(target(),CONFIG.ActiveEffect.attributeKeys??{},key=>game.i18n.localize(key));}
             function validate(){
-                if (!input.value.trim()) {
+                if (!input.value.trim() || input.getAttribute('aria-expanded')==='true' || !input.value.includes('.')) {
                     delete input.dataset.rsaState; delete hint.dataset.rsaState;
                     hint.textContent=t('SEARCH'); return;
                 }
                 const entry=catalog().find(e=>e.key===input.value);
                 const field=suffix=>[...root.querySelectorAll('[name]')].find(el=>el.name===prefix+suffix);
-                const value=field('value')?.value??'',type=field('type')?.value??field('mode')?.value??'override',phase=field('phase')?.value??'initial';
+                const value=field('value')?.value??'',type=field('mode')?.value??field('type')?.value??'override',phase=field('phase')?.value??'initial';
                 const check=assessChange(entry,value,type,phase);
                 input.dataset.rsaState=check.state;
                 hint.textContent=`${t(check.hint)}${entry?' · '+entry.label+' · '+t(entry.type.toUpperCase()):''}`;
                 hint.dataset.rsaState=check.state;
             }
-            search.addEventListener('input',event=>{
-                event.stopPropagation();list.replaceChildren();
-                if (!search.value.trim()) return;
-                for (const entry of searchFields(catalog(),search.value).slice(0,25)) {
-                    const button=document.createElement('button');button.type='button';button.className='rsa-field-choice';
-                    button.textContent=`${entry.label} — ${entry.key}`;
-                    button.addEventListener('click',event=>{
-                        event.preventDefault();event.stopPropagation();input.value=entry.key;input.dispatchEvent(new Event('change',{bubbles:true}));
-                        search.value='';list.replaceChildren();validate();
-                    });list.append(button);
-                }
+            function close(){list.replaceChildren();choices=[];active=-1;input.setAttribute('aria-expanded','false');input.removeAttribute('aria-activedescendant');}
+            function select(entry){input.value=entry.key;committed=entry.key;close();input.dispatchEvent(new Event('change',{bubbles:true}));validate();}
+            function show(){
+                close();choices=searchFields(catalog(),input.value).slice(0,25);
+                choices.forEach((entry,index)=>{
+                    const option=document.createElement('div');option.className='rsa-field-choice';option.id=listId+'-'+index;option.setAttribute('role','option');option.setAttribute('aria-selected','false');
+                    option.textContent=entry.label+' — '+entry.key;
+                    option.addEventListener('mousedown',event=>event.preventDefault());
+                    option.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();select(entry);input.focus();});list.append(option);
+                });input.setAttribute('aria-expanded',String(choices.length>0));
+            }
+            input.addEventListener('focus',show);
+            input.addEventListener('input',event=>{event.stopPropagation();show();validate();});
+            input.addEventListener('keydown',event=>{
+                if(event.key==='Escape'){event.preventDefault();event.stopPropagation();input.value=committed;close();return;}
+                if(['ArrowDown','ArrowUp'].includes(event.key)){
+                    event.preventDefault();event.stopPropagation();if(!choices.length)show();if(!choices.length)return;
+                    active=(active+(event.key==='ArrowDown'?1:-1)+choices.length)%choices.length;
+                    [...list.children].forEach((el,i)=>el.setAttribute('aria-selected',String(i===active)));
+                    input.setAttribute('aria-activedescendant',listId+'-'+active);list.children[active]?.scrollIntoView({block:'nearest'});
+                }else if(event.key==='Enter'&&choices.length){event.preventDefault();event.stopPropagation();select(choices[Math.max(0,active)]);}
             });
+            input.addEventListener('change',event=>{
+                // Search text is UI state, never a native effect key. Technical paths remain editable.
+                if(input.value&&!/^[A-Za-z_][\w-]*(?:\.[\w-]+)+$/.test(input.value)){event.stopImmediatePropagation();input.value=committed;}else committed=input.value;
+                validate();
+            },true);
+            input.addEventListener('blur',()=>{close();if(input.value&&!/^[A-Za-z_][\w-]*(?:\.[\w-]+)+$/.test(input.value))input.value=committed;validate();});
             row.addEventListener('input',validate);row.addEventListener('change',validate);
             root.querySelector('[name="transfer"]')?.addEventListener('change',validate);
             validate();
