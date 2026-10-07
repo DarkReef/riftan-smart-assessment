@@ -58,3 +58,4 @@ body .rsa-fate-footer blockquote {margin:8px 0 0;padding:0;border:0;font:italic 
 .rsa-field-helper {min-width:0;width:100%;}
 .rsa-field-results:not(:empty) {position:relative;z-index:2;max-height:240px;background:#20232b;border:1px solid #756647;border-radius:4px;}
 .rsa-field-choice {overflow-wrap:anywhere;}
+.rsa-field-choice[aria-selected="true"],.rsa-field-choice:hover{background:var(--color-bg-option,rgba(170,140,60,.2));cursor:pointer;}
