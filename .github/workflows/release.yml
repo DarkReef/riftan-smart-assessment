@@ -1,6 +1,8 @@
 name: Module release
 on:
   workflow_dispatch:
+  push:
+    tags: ['v*']
 permissions:
   contents: write
 jobs:
@@ -12,9 +14,19 @@ jobs:
         with:
           node-version: '22'
       - run: npm test
-      - run: zip -r riftan-smart-assessment.zip module.json scripts lang style.css LICENSE README.md docs
+      - name: Check release version
+        run: |
+          VERSION=$(node -p "JSON.parse(require('fs').readFileSync('module.json')).version")
+          if [[ "$GITHUB_REF_TYPE" == "tag" && "$GITHUB_REF_NAME" != "v${VERSION}" ]]; then
+            echo "Release tag does not match module.json" >&2
+            exit 1
+          fi
+      - run: zip -r riftan-smart-assessment.zip module.json scripts templates lang style.css action-reference.css LICENSE README.md RELEASE.md docs
+      - run: python tools/check_release.py riftan-smart-assessment.zip module.json
       - env:
           GH_TOKEN: ${{ github.token }}
         run: |
           VERSION=$(node -p "JSON.parse(require('fs').readFileSync('module.json')).version")
-          gh release create "v${VERSION}" riftan-smart-assessment.zip module.json --target "$GITHUB_SHA" --draft --generate-notes
+          OPTIONS=(--draft)
+          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then OPTIONS=(--verify-tag); fi
+          gh release create "v${VERSION}" riftan-smart-assessment.zip module.json --target "$GITHUB_SHA" "${OPTIONS[@]}" --notes-file RELEASE.md

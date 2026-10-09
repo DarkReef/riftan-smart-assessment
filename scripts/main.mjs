@@ -1,4 +1,6 @@
 import {enhanceRollCard} from './chat.mjs';
+import {registerCombatActionReference, openCombatActionReference, toggleCombatActionReference} from './combat/action-reference.mjs';
+import {registerReferenceMenus} from './combat/action-reference-menu.mjs';
 import {fieldCatalog,assessChange,searchFields} from './fields.mjs';
 import {SCOPE,rollData,fateActor,validateReroll,createFateService} from './fate.mjs';
 const t=key=>game.i18n.localize('RSA.'+key);
@@ -124,6 +126,12 @@ export function enhanceEffectEditor(app,html) {
     app.addEventListener?.('close',()=>observer.disconnect(),{once:true});
 }
 
+Hooks.once('init',()=>{
+    if (game.system.id!=='dark-heresy') return;
+    registerCombatActionReference();
+    registerReferenceMenus();
+});
+
 Hooks.once('ready',()=>{
     if (game.system.id!=='dark-heresy') return;
     service=createFateService({
@@ -136,7 +144,7 @@ Hooks.once('ready',()=>{
             await request.update({content:`<p>${esc(t('REQUEST_DONE'))}</p>`,[`flags.${SCOPE}.request.status`]:'done'});
         }
     });
-    game.modules.get(SCOPE).api={version:1,requestReroll,enhanceEffectEditor};
+    game.modules.get(SCOPE).api={version:1,requestReroll,enhanceEffectEditor,openCombatActionReference,toggleCombatActionReference};
     if (!game.darkHeresy?.tests?.fateSnapshotVersion) ui.notifications.warn(t('READY_ERROR'));
     Hooks.on('darkHeresy.preComputeRollTarget',data=>{
         const record=pending.get(data.flags?.rsaRequestId);
