@@ -21,7 +21,7 @@ jobs:
             echo "Release tag does not match module.json" >&2
             exit 1
           fi
-      - run: zip -r riftan-smart-assessment.zip module.json scripts templates lang style.css action-reference.css LICENSE README.md RELEASE.md docs
+      - run: zip -r riftan-smart-assessment.zip module.json scripts templates lang style.css action-reference.css damage.css LICENSE README.md RELEASE.md docs
       - run: python tools/check_release.py riftan-smart-assessment.zip module.json
       - env:
           GH_TOKEN: ${{ github.token }}

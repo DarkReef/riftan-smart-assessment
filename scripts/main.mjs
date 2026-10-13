@@ -1,4 +1,5 @@
 import {enhanceRollCard} from './chat.mjs';
+import {registerDamageUI} from './combat/damage-ui.mjs';
 import {registerCombatActionReference, openCombatActionReference, toggleCombatActionReference} from './combat/action-reference.mjs';
 import {registerReferenceMenus} from './combat/action-reference-menu.mjs';
 import {fieldCatalog,assessChange,searchFields} from './fields.mjs';
@@ -128,6 +129,7 @@ export function enhanceEffectEditor(app,html) {
 
 Hooks.once('init',()=>{
     if (game.system.id!=='dark-heresy') return;
+    registerDamageUI();
     registerCombatActionReference();
     registerReferenceMenus();
 });

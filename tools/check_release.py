@@ -15,7 +15,7 @@ with ZipFile(archive) as bundle:
     assert data["download"].endswith(f'/v{data["version"]}/riftan-smart-assessment.zip')
     names = set(bundle.namelist())
     required = set(data["esmodules"] + data["styles"] + [v["path"] for v in data["languages"]])
-    required.update({"templates/action-reference.hbs", "scripts/combat/action-reference-data.mjs", "scripts/combat/action-reference-menu.mjs", "LICENSE", "README.md", "RELEASE.md", "docs/combat-action-reference.md"})
+    required.update({"scripts/combat/damage-ui.mjs", "damage.css", "docs/combat-damage-v0.1.md", "templates/action-reference.hbs", "scripts/combat/action-reference-data.mjs", "scripts/combat/action-reference-menu.mjs", "LICENSE", "README.md", "RELEASE.md", "docs/combat-action-reference.md"})
     assert required <= names, f"Missing runtime files: {required - names}"
     for name in names:
         assert not name.startswith(("/", "../")) and "\\" not in name, name
