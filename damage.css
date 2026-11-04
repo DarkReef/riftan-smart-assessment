@@ -1,0 +1,9 @@
+.rsa-damage-confirmation { padding: 8px; margin-top: 8px; border: 1px solid #a77e42; border-radius: 4px; background: #171918; color: #eee; font: 12px/1.45 "Segoe UI", sans-serif; }
+.rsa-damage-confirmation p { margin: 4px 0; overflow-wrap: anywhere; }
+.rsa-damage-confirmation [data-controls] { display: flex; flex-wrap: wrap; gap: 5px; }
+.rsa-damage-confirmation button { flex: 1; min-width: 110px; color: #eee; background: #292922; }
+.rsa-damage-confirmation details { overflow: auto; }
+.rsa-damage-confirmation th, .rsa-damage-confirmation td { padding: 3px; text-align: left; vertical-align: top; }
+.rsa-damage-confirmation summary { cursor: pointer; color: #ddbc81; }
+.rsa-damage-edit label { display: block; margin: 8px 0; }
+.rsa-damage-edit input:not([type=checkbox]) { width: 100%; }

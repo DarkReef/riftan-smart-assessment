@@ -84,6 +84,8 @@ test('translations include ten distinct phrases for each outcome, all UI keys, a
     for(const language of [ru,en])for(const outcome of ['SUCCESS','FAILURE'])assert.equal(new Set(Array.from({length:10},(_,i)=>language[`RSA.${outcome}_${i}`])).size,10);
     const source=readFileSync(new URL('../scripts/main.mjs',import.meta.url),'utf8');
     for(const [,key]of source.matchAll(/\bt\(['"]([A-Z_]+)['"]\)/g))assert.ok(ru['RSA.'+key]&&en['RSA.'+key],key);
-    assert.equal(json('../module.json').relationships.systems[0].compatibility.minimum,'1.5.1');
+    const systems=json('../module.json').relationships.systems;
+    assert.equal(systems.find(system=>system.id==='dark-heresy').compatibility.minimum,'1.5.6');
+    assert.equal(systems.find(system=>system.id==='apex-heresy-ru').compatibility.minimum,'1.6.0');
 });
 

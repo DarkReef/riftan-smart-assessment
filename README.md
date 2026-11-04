@@ -1,14 +1,31 @@
-# Riftan Smart Assessment
+# Riftan Smart Assessment 0.3.1
 
-Independent module for Foundry VTT 14 and **Apex Heresy Ru 1.5.1**. No dependency on DAE, Riftan Charbar or ItemPileFFG.
+**Подтверждаемый урон Only War.** Требует Apex Heresy RU 1.6.0+ с отдельным ID или прежнего патча 1.5.6 с damage API v1. Запрос игрока → расчёт GM → подтверждение, с закреплённой целью, сквозной проверкой и приватной квитанцией. [Механики, ограничения и живой QA](docs/combat-damage-v0.1.md).
+
+## Боевые действия (0.2.0)
+
+**F1** открывает и закрывает компактную справку Only War: 34 действия, поиск, фильтры времени и книги. Клавиша переназначается в настройках управления **Riftan Smart Assessment**. Открыть справку мышью можно кнопкой **«Боевые действия»** в боковой вкладке настроек, в разделе документации рядом с поддержкой и руководством, а также из главного меню **Esc**. Кнопки доступны игрокам и ведущему; повторное нажатие выводит уже открытое окно вперёд.
+
+Справка полностью находится в модуле: система Apex Heresy RU обновления ради неё не требует. Правила других книг не подменяются правилами OW; расхождения русского источника отмечены в таблице. [Источники, управление и проверка](docs/combat-action-reference.md).
+
+```js
+await game.modules.get('riftan-smart-assessment').api.openCombatActionReference();
+await game.modules.get('riftan-smart-assessment').api.toggleCombatActionReference();
+```
+
+Independent module for Foundry VTT 14 and **Apex Heresy RU 1.6.0+** (legacy package: 1.5.6+). No dependency on DAE, Riftan Charbar or ItemPileFFG.
 
 ## Installation / Установка
+
+Поддерживаются отдельная система `apex-heresy-ru` и прежние версии Apex Heresy с ID `dark-heresy`. Это альтернативные системы в манифесте: нужен один совместимый пакет с damage API v1 (система 1.5.6+). ID `dark-heresy` также занят в каталоге Foundry сторонней системой Vendare; её API не является совместимым контрактом этого модуля. Для дальнейших обновлений используйте отдельный пакет Apex Heresy RU.
+
+Переименование пакета не меняет сохранённые `flags.dark-heresy`, классы CSS и API `game.darkHeresy`. Флаги читаются напрямую, без проверки старого ID как установленного пакета. Для старого ID манифест ссылается на закреплённый релиз Apex Heresy RU 1.5.6, для нового — на актуальный релиз. Перенос существующего мира выполняется по инструкции системы; модуль сам не меняет ID мира.
 
 1. Update the system first using this manifest: https://github.com/DarkReef/Apex-Heresy-Ru/releases/latest/download/system.json
 2. Install this module using: https://github.com/DarkReef/riftan-smart-assessment/releases/latest/download/module.json
 3. Enable the module in your world. A GM must be connected for Fate rerolls.
 
-**Сначала обновите форк системы до 1.5.1**, затем установите и включите модуль. Старый Apex Heresy без расширения сохранённой сложности не поддерживает точные перебросы этим модулем.
+**Сначала установите совместимую систему**, затем включите модуль. Старый Apex Heresy без расширения сохранённой сложности не поддерживает точные перебросы этим модулем; подтверждение урона требует damage API v1.
 
 ## Active Effects
 
@@ -46,7 +63,7 @@ GPL-3.0; system integration derives from Apex Heresy. See LICENSE.
 ## Independent development
 
 Run `npm test` in this repository. The system is installed separately.
-The manual release workflow creates a draft release with this module only.
+The manual release workflow creates a draft release with this module only. Pushing a version tag matching module.json publishes the tested and validated module ZIP and manifest.
 Live multiplayer validation against the new system build is still pending.
 
 ## Установка из публичного репозитория

@@ -1,8 +1,8 @@
 {
   "id": "riftan-smart-assessment",
   "title": "Riftan Smart Assessment",
-  "description": "Active Effect field assistance and Fate rerolls for Apex Heresy.",
-  "version": "0.1.5",
+  "description": "Active Effect assistance, Fate rerolls, action reference and GM-confirmed Only War damage for Apex Heresy.",
+  "version": "0.3.1",
   "compatibility": {
     "minimum": "14",
     "verified": "14"
@@ -19,7 +19,9 @@
     "scripts/main.mjs"
   ],
   "styles": [
-    "style.css"
+    "style.css",
+    "action-reference.css",
+    "damage.css"
   ],
   "languages": [
     {
@@ -36,17 +38,26 @@
   "relationships": {
     "systems": [
       {
+        "id": "apex-heresy-ru",
+        "type": "system",
+        "manifest": "https://github.com/DarkReef/Apex-Heresy-Ru/releases/latest/download/system.json",
+        "compatibility": {
+          "minimum": "1.6.0"
+        }
+      },
+      {
         "id": "dark-heresy",
         "type": "system",
+        "manifest": "https://github.com/DarkReef/Apex-Heresy-Ru/releases/download/v1.5.6-ru/system.json",
         "compatibility": {
-          "minimum": "1.5.1"
+          "minimum": "1.5.6"
         }
       }
     ]
   },
   "url": "https://github.com/DarkReef/riftan-smart-assessment",
   "manifest": "https://github.com/DarkReef/riftan-smart-assessment/releases/latest/download/module.json",
-  "download": "https://github.com/DarkReef/riftan-smart-assessment/releases/download/v0.1.5/riftan-smart-assessment.zip",
+  "download": "https://github.com/DarkReef/riftan-smart-assessment/releases/download/v0.3.1/riftan-smart-assessment.zip",
   "license": "LICENSE",
   "readme": "https://github.com/DarkReef/riftan-smart-assessment#readme"
 }
