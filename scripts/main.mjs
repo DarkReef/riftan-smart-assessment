@@ -1,4 +1,5 @@
 import {enhanceRollCard} from './chat.mjs';
+import {isSupportedSystem} from './system-identity.mjs';
 import {registerDamageUI} from './combat/damage-ui.mjs';
 import {registerCombatActionReference, openCombatActionReference, toggleCombatActionReference} from './combat/action-reference.mjs';
 import {registerReferenceMenus} from './combat/action-reference-menu.mjs';
@@ -55,7 +56,7 @@ async function processRequest(request) {
 export function enhanceEffectEditor(app,html) {
     const root=html?.querySelector?html:html?.[0];
     const effect=app.document??app.object;
-    if (!root || !effect || game.system.id!=='dark-heresy') return;
+    if (!root || !effect || !isSupportedSystem()) return;
     const target=()=>{
         const parent=effect.parent;
         const transfer=root.querySelector('[name="transfer"]')?.checked??effect.transfer;
@@ -128,14 +129,14 @@ export function enhanceEffectEditor(app,html) {
 }
 
 Hooks.once('init',()=>{
-    if (game.system.id!=='dark-heresy') return;
+    if (!isSupportedSystem()) return;
     registerDamageUI();
     registerCombatActionReference();
     registerReferenceMenus();
 });
 
 Hooks.once('ready',()=>{
-    if (game.system.id!=='dark-heresy') return;
+    if (!isSupportedSystem()) return;
     service=createFateService({
         actor:request=>resolveActor(rollData(game.messages.get(request.getFlag(SCOPE,'request')?.sourceId))),
         source:request=>game.messages.get(request.getFlag(SCOPE,'request')?.sourceId),user:request=>request.author,
@@ -181,7 +182,7 @@ Hooks.once('ready',()=>{
 });
 Hooks.on('renderActiveEffectConfig',enhanceEffectEditor);
 Hooks.on('renderChatMessageHTML',(message,html)=>{
-    if (game.system.id!=='dark-heresy') return;
+    if (!isSupportedSystem()) return;
     html.classList.remove('rsa-fate-success','rsa-fate-failure','rsa-replaced');
     const body=html.querySelector('.message-content');if(!body)return;
     body.querySelectorAll('.rsa-fate-footer,.rsa-replacement').forEach(el=>el.remove());

@@ -1,10 +1,11 @@
 import {openCombatActionReference, reportReferenceError} from "./action-reference.mjs";
+import {isSupportedSystem} from "../system-identity.mjs";
 
 const MENU_ID = "rsaCombatActionReference";
 
 /** Settings sidebar and its popped-out copy both emit renderSettings in v14. */
 export function addReferenceSettingsButton(_app, html) {
-    if (game.system.id !== "dark-heresy") return;
+    if (!isSupportedSystem()) return;
     const root = html?.querySelector ? html : html?.[0];
     const section = root?.querySelector("[data-help-docs], section.documentation");
     if (!section || section.querySelector("[data-rsa-combat-reference]")) return;
@@ -29,7 +30,7 @@ export function registerReferenceMenus() {
     foundry.applications.ui.MainMenu.ITEMS[MENU_ID] = {
         label: "RSA.ACTION_REFERENCE",
         icon: "fa-solid fa-fw fa-list-check",
-        enabled: () => game.system.id === "dark-heresy",
+        enabled: () => isSupportedSystem(),
         async onClick() {
             try {
                 await this.close(); // Leave the modal menu before showing the reference.

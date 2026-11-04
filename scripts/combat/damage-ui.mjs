@@ -1,5 +1,5 @@
+import {isSupportedSystem,getSystemFlag} from '../system-identity.mjs';
 /** Presentation only. All arithmetic, authority and persistence belong to the system API. */
-const SCOPE='dark-heresy';
 const LOCATIONS={'ARMOUR.BODY':'Торс','ARMOUR.HEAD':'Голова','ARMOUR.LEFT_ARM':'Левая рука',
     'ARMOUR.RIGHT_ARM':'Правая рука','ARMOUR.LEFT_LEG':'Левая нога','ARMOUR.RIGHT_LEG':'Правая нога'};
 const LABELS={ready:'Готово к подтверждению',pending:'Ожидает ведущего','pending-defense':'Ожидает защиты',
@@ -22,7 +22,7 @@ const warning=value=>String(value)
 
 /** Retained as structured UUIDs, never scraped from chat HTML or current actor selection. */
 async function requestFor(message) {
-    const data=message.getFlag(SCOPE,'rollData');
+    const data=getSystemFlag(message,'rollData');
     const recorded=(data?.targets??[]).map(t=>game.scenes.get(t.sceneId)?.tokens.get(t.tokenId)).filter(Boolean);
     let token;
     if(recorded.length===1) token=recorded[0];
@@ -70,12 +70,12 @@ async function edit(preview) {
 
 export function renderDamageControls(message, html) {
     const root=html?.querySelector ? html : html?.[0];
-    if(!root || game.system.id!=='dark-heresy') return;
+    if(!root || !isSupportedSystem()) return;
     root.querySelectorAll('.rsa-damage-confirmation').forEach(el=>el.remove());
     if(!message.isContentVisible) return;
-    const request=message.getFlag(SCOPE,'damageRequest'), envelope=message.getFlag(SCOPE,'damageJournal');
-    const summary=message.getFlag(SCOPE,'damageConfirmation');
-    const data=message.getFlag(SCOPE,'rollData');
+    const request=getSystemFlag(message,'damageRequest'), envelope=getSystemFlag(message,'damageJournal');
+    const summary=getSystemFlag(message,'damageConfirmation');
+    const data=getSystemFlag(message,'rollData');
     if(!request && !envelope && !data?.flags?.isDamageRoll) return;
     if(!request && !envelope && !(message.isAuthor || game.user.isGM)) return;
     const frame=document.createElement('section');frame.className='rsa-damage-confirmation';

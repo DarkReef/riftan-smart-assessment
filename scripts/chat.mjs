@@ -1,3 +1,4 @@
+import {isSupportedSystem,getSystemFlag} from './system-identity.mjs';
 /** Presentation only: never rewrite stored traits, item names or roll data. */
 export function traitParts(text, russian = false, localize = value => globalThis.game?.darkHeresy?.localization?.ruleTerm?.(value, "ow") ?? value) {
     return String(text ?? '').split(/,\s*(?![^()]*\))/).filter(part => part.trim()).map(part => {
@@ -9,11 +10,11 @@ export function traitParts(text, russian = false, localize = value => globalThis
 export function shortChip(text) {return String(text).replace(/\s*\([^)]*\)/g,'').trim();}
 
 export function enhanceRollCard(message, html) {
-    if (game.system.id !== 'dark-heresy' || !message.isContentVisible) return;
+    if (!isSupportedSystem() || !message.isContentVisible) return;
     const root = html?.querySelector ? html : html?.[0];
     if (!root) return;
     const cards = root.querySelectorAll('.dark-heresy.chat.roll');
-    const data = message.getFlag('dark-heresy','rollData');
+    const data = getSystemFlag(message,'rollData');
     for (const card of cards) {
         card.classList.add('rsa-compact-card');
         for (const chip of card.querySelectorAll('.dh-chips .chip')) {

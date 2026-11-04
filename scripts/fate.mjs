@@ -1,5 +1,6 @@
+import {getSystemFlag} from './system-identity.mjs';
 export const SCOPE='riftan-smart-assessment';
-export function rollData(message) {return message?.getFlag?.('dark-heresy','rollData');}
+export function rollData(message) {return getSystemFlag(message,'rollData');}
 export function fateActor(data, resolve, actors) {
     const evasion=data?.flags?.isEvasion ? data.evasions?.[data.evasions.selected] : null;
     if (evasion?.actorUuid) return resolve(evasion.actorUuid);

@@ -75,3 +75,12 @@ test('unrelated systems do not receive reference controls',()=>{
         assert.equal(foundry.applications.ui.MainMenu.ITEMS.rsaCombatActionReference.enabled(),false);
     }finally{game.system.id='dark-heresy';}
 });
+
+test('renamed Apex package receives both settings and main-menu reference controls',()=>{
+    game.system.id='apex-heresy-ru';
+    try {
+        const {root,section}=fixture();addReferenceSettingsButton({},root);
+        assert.equal(section.children.length,1);
+        assert.equal(foundry.applications.ui.MainMenu.ITEMS.rsaCombatActionReference.enabled(),true);
+    } finally {game.system.id='dark-heresy';}
+});
