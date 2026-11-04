@@ -39,6 +39,17 @@ async function execute(data,source,history) {
             if (record.message) return record.message;
             throw new Error('Roll cancelled');
         }
+        // The unified combat card stores a Fate result on its existing root,
+        // so no createChatMessage event will arrive for that visible result.
+        const root=data.workflowRootMessageId?game.messages.get(data.workflowRootMessageId):null;
+        const updated=rollData(root);
+        if(root && updated?.flags?.rsaRequestId===data.flags.rsaRequestId && updated.flags.isReRoll) {
+            // A persisted result must never be refunded if its history write fails.
+            record.message=root;
+            await root.setFlag(SCOPE,'fate',{...history,after:Number(updated.result),success:!!updated.flags.isSuccess,
+                phraseIndex:record.phraseIndex,requestId:data.flags.rsaRequestId});
+            return root;
+        }
         return record.message??await created;
     } catch(error) {
         if (record.message) return record.message;
@@ -143,7 +154,7 @@ Hooks.once('ready',()=>{
         done:request=>request.getFlag(SCOPE,'request')?.status!=='pending',messages,config:()=>game.darkHeresy.config,
         clone:foundry.utils.deepClone,execute,
         finish:async(request,source,result)=>{
-            await source.setFlag(SCOPE,'replacement',result.id);
+            if(source.id!==result.id) await source.setFlag(SCOPE,'replacement',result.id);
             await request.update({content:`<p>${esc(t('REQUEST_DONE'))}</p>`,[`flags.${SCOPE}.request.status`]:'done'});
         }
     });

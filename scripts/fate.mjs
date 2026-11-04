@@ -19,6 +19,9 @@ export function validateReroll(message,actor,user,messages,config={}) {
     const data=rollData(message);
     if (!data || !message.isRoll || data.flags?.isDamageRoll || data.flags?.isRegeneration || !Number.isFinite(Number(data.target?.final)) || !Number.isFinite(Number(data.result))) throw new Error('UNSUPPORTED');
     if (!actor || !visibleTo(message,user) || (!user.isGM && !actor.testUserPermission(user,'OWNER'))) throw new Error('NO_PERMISSION');
+    const workflow=getSystemFlag(message,'combatWorkflow');
+    if (Array.isArray(workflow?.targets) && workflow.targets.some(row=>row.operation||row.pinning?.operation||row.pinning?.conditionApplied
+        ||['applied','applying','needsReview'].includes(row.phase)||row.pinning?.phase==='needsReview')) throw new Error('USED');
     if (data.flags?.isSuccess !== false) throw new Error('NOT_FAILED');
     if (data.flags?.isReRoll || message.getFlag(SCOPE,'replacement') || [...messages].some(m=>m.getFlag(SCOPE,'fate')?.sourceId===message.id)) throw new Error('USED');
     if (actor.type==='heretic') {

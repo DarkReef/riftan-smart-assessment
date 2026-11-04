@@ -86,6 +86,6 @@ test('translations include ten distinct phrases for each outcome, all UI keys, a
     for(const [,key]of source.matchAll(/\bt\(['"]([A-Z_]+)['"]\)/g))assert.ok(ru['RSA.'+key]&&en['RSA.'+key],key);
     const systems=json('../module.json').relationships.systems;
     assert.equal(systems.find(system=>system.id==='dark-heresy').compatibility.minimum,'1.5.6');
-    assert.equal(systems.find(system=>system.id==='apex-heresy-ru').compatibility.minimum,'1.6.0');
+    assert.equal(systems.find(system=>system.id==='apex-heresy-ru').compatibility.minimum,'1.7.0');
 });
 
