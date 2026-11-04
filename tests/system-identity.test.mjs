@@ -11,7 +11,7 @@ test('manifest supports both Apex package IDs with matching runtime gates and ow
     assert.deepEqual(manifest.relationships.systems.map(s=>s.id),SUPPORTED_SYSTEM_IDS);
     for(const system of manifest.relationships.systems) {
         assert.equal(isSupportedSystem(system.id),true);
-        assert.equal(system.compatibility.minimum,system.id==='apex-heresy-ru'?'1.6.0':'1.5.6');
+        assert.equal(system.compatibility.minimum,system.id==='apex-heresy-ru'?'1.7.0':'1.5.6');
         assert.equal(system.manifest,`https://github.com/DarkReef/Apex-Heresy-Ru/releases/${system.id==='dark-heresy'?'download/v1.5.6-ru':'latest/download'}/system.json`);
     }
     assert.equal(isSupportedSystem('unrelated'),false);

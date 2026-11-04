@@ -1,6 +1,8 @@
-# Riftan Smart Assessment 0.3.1
+# Riftan Smart Assessment 0.4.0
 
-**Подтверждаемый урон Only War.** Требует Apex Heresy RU 1.6.0+ с отдельным ID или прежнего патча 1.5.6 с damage API v1. Запрос игрока → расчёт GM → подтверждение, с закреплённой целью, сквозной проверкой и приватной квитанцией. [Механики, ограничения и живой QA](docs/combat-damage-v0.1.md).
+**Переброс Судьбы в единой боевой карточке.** Требует Apex Heresy RU 1.7.0+ с отдельным ID или прежнего патча 1.5.6 с damage API v1. На новой системе результат и история переброса обновляются внутри исходной карточки атаки; дублировать бросок в чате не требуется. Обычные карточки прежних систем сохраняют отдельный результат и ссылку замены.
+
+**Подтверждаемый урон Only War.** Запрос игрока → расчёт GM → подтверждение, с закреплённой целью, сквозной проверкой и приватной квитанцией. [Механики, ограничения и живой QA](docs/combat-damage-v0.1.md).
 
 ## Боевые действия (0.2.0)
 
@@ -13,7 +15,7 @@ await game.modules.get('riftan-smart-assessment').api.openCombatActionReference(
 await game.modules.get('riftan-smart-assessment').api.toggleCombatActionReference();
 ```
 
-Independent module for Foundry VTT 14 and **Apex Heresy RU 1.6.0+** (legacy package: 1.5.6+). No dependency on DAE, Riftan Charbar or ItemPileFFG.
+Independent module for Foundry VTT 14 and **Apex Heresy RU 1.7.0+** (legacy package: 1.5.6+). No dependency on DAE, Riftan Charbar or ItemPileFFG.
 
 ## Installation / Установка
 
@@ -39,9 +41,11 @@ Right-click a native system check → **Перебросить за Fate — 1 /
 
 The active GM validates ownership and original card visibility, queues requests per Actor, spends one **current** Fate point and repeats the saved test with its original final target and modifiers. It uses the native check/attack engine; rerolls do not consume ammunition or recharge a weapon again. Only failed tests may be rerolled; damage cards, regeneration checks with automatic healing, and already-rerolled checks are rejected. Existing Black Crusade Infamy eligibility restrictions are retained.
 
-Successful rerolls have a gold frame; failures a blood-scarlet frame. Each has one of ten outcome-specific authored phrases (not quotations from published books), selected once and stored on the card. The footer records `original → new result` and `Fate before → after`. Original cards remain in chat, are marked as replaced and link to the new result. Hidden and whispered rolls retain the original recipients/blindness; history is rendered only to users who can see the relevant card.
+Successful rerolls have a gold frame; failures a blood-scarlet frame. Each has one of ten outcome-specific authored phrases (not quotations from published books), selected once and stored on the card. The footer records `original → new result` and `Fate before → after`. Unified combat cards update their existing root and retain the history there; they never receive a replacement link to themselves. Ordinary cards remain in chat, are marked as replaced and link to the new result. Hidden and whispered rolls retain the original recipients/blindness; history is rendered only to users who can see the relevant card.
 
-Requests require a connected GM. An error before a new card exists refunds the point. Once a card exists, failure recording history never refunds it. The result card itself prevents reuse even if the history update fails. Checks with system-specific side effects retain the native engine's behavior; this is not a full combat automation engine. As with other Foundry modules, request document flags are not a security boundary against a user deliberately running privileged JavaScript.
+Requests require a connected GM. An error before a result is stored refunds the point. Once the new result exists, including one saved on the original combat card, failure recording history never refunds it. The saved reroll prevents reuse even if its cosmetic history update fails. A combat card cannot be rerolled after dependent damage has been applied, while a dependent operation is running or needs GM review, or after its failed Pinning test has already applied the condition. Resolve the existing operation rather than spending another point.
+
+Checks with system-specific side effects retain the native engine's behavior; this module uses the system's combat workflow and does not implement a second one. As with other Foundry modules, request document flags are not a security boundary against a user deliberately running privileged JavaScript.
 
 ## API
 
@@ -74,7 +78,7 @@ Live multiplayer validation against the new system build is still pending.
 https://github.com/DarkReef/riftan-smart-assessment/releases/latest/download/module.json
 ```
 
-Манифест и ZIP доступны без авторизации. Для обновления используйте штатную проверку обновлений Foundry. Рекомендуемая система — Apex Heresy RU 1.5.3; система устанавливается отдельно.
+Манифест и ZIP доступны без авторизации. Для обновления используйте штатную проверку обновлений Foundry. Рекомендуемая система — Apex Heresy RU 1.7.0+; система устанавливается отдельно.
 
 ## Нативный поиск ключа (0.1.5)
 
